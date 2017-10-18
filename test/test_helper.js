@@ -9,6 +9,10 @@ import {Provider} from 'react-redux';
 import configureStore from 'redux-mock-store';
 import reducers from '../src/reducers';
 import thunk from 'redux-thunk';
+import {shallow} from 'enzyme';
+import {configure} from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
 global.document = jsdom.jsdom('<!doctype html><html><body></body></html>');
 global.window = global.document.defaultView;
 global.navigator = global.window.navigator;
@@ -20,18 +24,21 @@ global.EVDB = {
 };
 
 const $ = _$(window);
-
+configure({adapter: new Adapter()});
 chaiJquery(chai, chai.util, $);
 
-function renderComponent(ComponentClass, props = {}, state = {}) {
+function renderComponent(ComponentClass, props = {}, state = {}, componentState = {}) {
 	const mockStore = configureStore([thunk]);
 	const componentInstance = TestUtils.renderIntoDocument(
 		<Provider store={mockStore(state)}>
 			<ComponentClass {...props}/>
 		</Provider>
 	);
-
 	return $(ReactDOM.findDOMNode(componentInstance));
+}
+
+function renderShallow(ComponentClass) {
+	return shallow(<ComponentClass/>)
 }
 
 $.fn.simulate = function(eventName, value) {
@@ -41,4 +48,4 @@ $.fn.simulate = function(eventName, value) {
 	TestUtils.Simulate[eventName](this[0]);
 };
 
-export {renderComponent, expect};
+export {renderComponent, expect, renderShallow};

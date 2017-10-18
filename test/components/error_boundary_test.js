@@ -1,30 +1,31 @@
 import {
 	renderComponent,
-	expect
+	expect,
+	renderShallow
 } from '../test_helper';
 import ErrorBoundary from '../../src/components/error_boudary';
 
 describe('ErrorBoundary', () => {
 	let component;
+	beforeEach(() => {
+		component = renderShallow(ErrorBoundary);
+	});
 	it('should have correct class name error_boundary', () => {
-		component = renderComponent(ErrorBoundary, {
-			children: [1, 2, 3]
+
+		component.setState({
+			hasError: true
 		});
-		console.log(component)
-		// component.setState({
-		// 	hasError: true
-		// });
-		//expect(component).to.have.class('error_boundary');
+		expect(component.find('.error_boundary')).to.exist;
 	});
 	it('should render h1 when there is an error', () => {
-		// component = renderComponent(ErrorBoundary, {}, {
-		// 	hasError: true
-		// });
-		//expect(component.find('h1')).to.exist;
+
+		component.setState({
+			hasError: true
+		});
+		expect(component.find('h1')).to.exist;
 	});
 	it('should render children when there is no error', () => {
-		//component = renderComponent(ErrorBoundary);
-		//expect(component).to.have.class('error_boundary');
+		expect(component.children()).to.have.length(0);
 	});
 
 });
