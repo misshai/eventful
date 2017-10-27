@@ -7,7 +7,7 @@ import EventDescription from './event_description';
 
 import {searchForEvents} from '../actions';
 
-class App extends Component {
+export class App extends Component {
 
 	constructor(props) {
 		super(props);
@@ -25,15 +25,19 @@ class App extends Component {
 		this.getListOfEvents();
 	}
 
+	searchByLocation(searchValueByLocation) {
+		this.setState({searchValueByLocation});
+		this.getListOfEvents();
+	}
+
+	searchByTerm(searchValueByTerm) {
+		this.setState({searchValueByTerm});
+		this.getListOfEvents();
+	}
+
 	render() {
-		const eventSearchByLocation = _.debounce(searchValueByLocation => {
-			this.setState({searchValueByLocation});
-			this.getListOfEvents()
-		}, 300);
-		const eventSearchByTerm = _.debounce(searchValueByTerm => {
-			this.setState({searchValueByTerm});
-			this.getListOfEvents()
-		}, 300);
+		const eventSearchByLocation = _.debounce(this.searchByLocation.bind(this), 300);
+		const eventSearchByTerm = _.debounce(this.searchByTerm.bind(this), 300);
 		return (
 			<div className='container'>
 				<div className='row'>

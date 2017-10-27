@@ -8,7 +8,7 @@ import ErrorBoundary from '../../src/components/error_boudary';
 describe('ErrorBoundary', () => {
 	let component;
 	beforeEach(() => {
-		component = renderShallow(ErrorBoundary);
+		component = renderShallow(ErrorBoundary, {});
 	});
 	it('should have correct class name error_boundary', () => {
 
@@ -26,6 +26,13 @@ describe('ErrorBoundary', () => {
 	});
 	it('should render children when there is no error', () => {
 		expect(component.children()).to.have.length(0);
+	});
+	it('should change the state on componentDidCatch', () => {
+		component.instance().componentDidCatch();
+		expect(component.state('hasError')).to.be.eql(true);
+	});
+	it('should set correct initial state', () => {
+		expect(component.state('hasError')).to.be.eql(false);
 	});
 
 });

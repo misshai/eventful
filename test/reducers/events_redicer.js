@@ -19,10 +19,15 @@ describe('events reducer', () => {
 		expect(eventsReducer([], action)).to.be.eql([]);
 	});
 	it('handles action with RECEIVED_EVENTS type', () => {
-		const action = {
+		let action = {
 			type: RECEIVED_EVENTS,
 			payload: ['new event']
 		}
 		expect(eventsReducer([], action)).to.be.eql(['new event']);
+		action = {
+			type: RECEIVED_EVENTS,
+			payload: []
+		}
+		expect(eventsReducer([], action)).to.be.eql([]);
 	});
 });

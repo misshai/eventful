@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-dom/test-utils';
 import jsdom from 'jsdom';
 import chai, {expect} from 'chai';
+import spies from 'chai-spies';
 import chaiJquery from 'chai-jquery';
 import {Provider} from 'react-redux';
 import configureStore from 'redux-mock-store';
@@ -26,7 +27,7 @@ global.EVDB = {
 const $ = _$(window);
 configure({adapter: new Adapter()});
 chaiJquery(chai, chai.util, $);
-
+chai.use(spies);
 function renderComponent(ComponentClass, props = {}, state = {}, componentState = {}) {
 	const mockStore = configureStore([thunk]);
 	const componentInstance = TestUtils.renderIntoDocument(
@@ -37,8 +38,10 @@ function renderComponent(ComponentClass, props = {}, state = {}, componentState 
 	return $(ReactDOM.findDOMNode(componentInstance));
 }
 
-function renderShallow(ComponentClass) {
-	return shallow(<ComponentClass/>)
+function renderShallow(ComponentClass, props = {}, state = {}) {
+	const mockStore = configureStore([thunk]);
+
+	return shallow(<ComponentClass {...props}/>);
 }
 
 $.fn.simulate = function(eventName, value) {
@@ -48,4 +51,4 @@ $.fn.simulate = function(eventName, value) {
 	TestUtils.Simulate[eventName](this[0]);
 };
 
-export {renderComponent, expect, renderShallow};
+export {renderComponent, expect, renderShallow, chai};
